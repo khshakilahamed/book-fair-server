@@ -120,8 +120,15 @@ const refreshToken = async (token: string) => {
   return { accessToken: newAccessToken };
 };
 
+const getCurrentUser = async (payload: { user: string }) => {
+  const user = await User.findById(payload.user);
+
+  return { name: user?.name, email: user?.email };
+};
+
 export const AuthService = {
   createUser,
   loginUser,
   refreshToken,
+  getCurrentUser,
 };

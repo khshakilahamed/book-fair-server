@@ -8,6 +8,7 @@ import {
   ILoginRegisterResponse,
   IRefreshTokenResponse,
 } from "./auth.interface";
+import { IUser } from "../user/user.interface";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -97,9 +98,54 @@ const refreshToken = async (
     next(error);
   }
 };
+const getCurrentUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await AuthService.getCurrentUser(req.body);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User retrieved successfully",
+      data: {
+        user: result,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const logoutUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // const refreshToken = "";
+    // // set refresh token
+    // const cookieOptions = {
+    //   secure: config.env === "production",
+    //   httpOnly: true,
+    // };
+
+    // res.cookie("refreshToken", refreshToken, cookieOptions);
+    res.clearCookie("refreshToken");
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User retrieved successfully",
+      data: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const AuthController = {
   createUser,
   loginUser,
   refreshToken,
+  getCurrentUser,
+  logoutUser,
 };
