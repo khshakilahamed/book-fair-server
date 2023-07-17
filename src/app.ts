@@ -18,7 +18,7 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/api/v1/auth", AuthRoute);
-app.use("/api/v1/book", BookRoute);
+app.use("/api/v1/books", BookRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

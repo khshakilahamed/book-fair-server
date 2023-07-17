@@ -1,5 +1,6 @@
 import ApiError from "../../../errors/ApiError";
-import { IBook } from "./book.interface";
+import { bookSearchableFields } from "./book.constant";
+import { IBook, IBookFilters } from "./book.interface";
 import { Book } from "./book.model";
 
 const createBook = async (payload: IBook): Promise<IBook> => {
@@ -22,8 +23,43 @@ const getSingleBook = async (id: string): Promise<IBook> => {
   return book;
 };
 
-const getAllBooks = async (): Promise<IBook[]> => {
-  const books = await Book.find();
+const getAllBooks = async (filters: IBookFilters): Promise<IBook[]> => {
+  const { searchTerm, ...filtersData } = filters;
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      $or: bookSearchableFields.map((field) => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: "i",
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => {
+        if (field === "maxPrice") {
+          return { price: { $lte: value } };
+        }
+        if (field === "minPrice") {
+          return { price: { $gte: value } };
+        }
+
+        return { [field]: value };
+      }),
+    });
+  }
+
+  const whereCondition =
+    andConditions.length > 0 ? { $and: andConditions } : {};
+
+  const books = await Book.find(whereCondition)
+    .populate("user")
+    .sort({ createdAt: "desc" });
 
   return books;
 };

@@ -3,6 +3,8 @@ import { BookService } from "./book.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { IBook } from "./book.interface";
+import pick from "../../../shared/pick";
+import { bookFilterableFields } from "./book.constant";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -42,7 +44,8 @@ const getSingleBook = async (
 
 const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await BookService.getAllBooks();
+    const filters = pick(req.query, bookFilterableFields);
+    const result = await BookService.getAllBooks(filters);
 
     sendResponse<IBook[]>(res, {
       statusCode: httpStatus.OK,

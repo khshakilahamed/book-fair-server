@@ -19,3 +19,9 @@ export type IBook = {
 export type BookModel = {
   isBookExist(email: string): Promise<IBook>;
 } & Model<IBook>;
+
+export type IBookFilters = {
+  searchTerm?: string;
+  minPrice?: string;
+  maxPrice?: string;
+};
