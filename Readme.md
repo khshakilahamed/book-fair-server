@@ -68,6 +68,8 @@
 
 - `GET /books/my-books` (auth check - access token)
 
+---
+
 ### Wishlist
 
 - `POST /wishlist`(auth check -access token and take user id)
@@ -87,6 +89,8 @@
     "id": "64b6f9a0413066b9ba39bded"
 }
 ```
+
+---
 
 ### Reading List
 
