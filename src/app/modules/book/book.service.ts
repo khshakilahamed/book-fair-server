@@ -100,10 +100,38 @@ const getReviews = async (bookId: string) => {
   return reviews;
 };
 
+const myBooks = async (payload: string) => {
+  console.log(payload);
+
+  const result = await Book.find({ user: payload }).sort({ createdAt: "desc" });
+
+  return result;
+};
+
+const deleteBook = async (payload: { bookId: string; user: string }) => {
+  const { bookId, user } = payload;
+
+  const book = await Book.findById(bookId);
+
+  if (!book) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Book does not found");
+  }
+
+  if (user.toString() !== book?.user.toString()) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "You cannot delete the book");
+  }
+
+  const result = await Book.findOneAndDelete({ _id: bookId, user: user });
+
+  return result;
+};
+
 export const BookService = {
   createBook,
   getSingleBook,
   getAllBooks,
   addBookReview,
   getReviews,
+  deleteBook,
+  myBooks,
 };

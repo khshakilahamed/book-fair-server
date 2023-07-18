@@ -104,10 +104,49 @@ const getReviews = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getMyBooks = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = req?.body.user;
+
+    console.log(user);
+
+    const result = await BookService.myBooks(user);
+
+    sendResponse<IBook[]>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successfully retrieved the books",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: bookId } = req.params;
+    const user = req?.body.user;
+
+    const result = await BookService.deleteBook({ bookId, user });
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successfully deleted the book",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const BookController = {
   createBook,
   getSingleBook,
   getAllBooks,
   addBookReview,
   getReviews,
+  getMyBooks,
+  deleteBook,
 };

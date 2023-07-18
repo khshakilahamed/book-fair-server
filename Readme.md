@@ -63,3 +63,47 @@
 ```
 
 - `GET /books/reviews/64b4cf1d6197365d498e6362`
+
+- `DELETE /books/64b3ec0e75b9157d8b1e1c83` (auth check - access token)
+
+- `GET /books/my-books` (auth check - access token)
+
+### Wishlist
+
+- `POST /wishlist`(auth check -access token and take user id)
+
+```js
+{
+    "book":"64b4cecb6197365d498e6359"
+}
+```
+
+- `GET /wishlist` (auth check -access token and take user id)
+
+- `DELETE /wishlist` (auth check -access token and take user id)
+
+```
+{
+    "id": "64b6f9a0413066b9ba39bded"
+}
+```
+
+### Reading List
+
+- `POST /reading-list`(auth check -access token and take user id)
+
+```js
+{
+    "book":"64b4cecb6197365d498e6359"
+}
+```
+
+- `GET /reading-list` (auth check -access token and take user id)
+
+- `DELETE /reading-list` (auth check -access token and take user id)
+
+```
+{
+    "id": "64b6f9a0413066b9ba39bded"
+}
+```

@@ -7,6 +7,8 @@ import { AuthRoute } from "./app/modules/auth/auth.route";
 import morgan from "morgan";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import { BookRoute } from "./app/modules/book/book.route";
+import { WishlistRoute } from "./app/modules/wishlist/wishlist.route";
+import { ReadingListRoute } from "./app/modules/readingList/readingList.route";
 
 app.use(cors());
 app.use(cookieParser());
@@ -19,6 +21,8 @@ app.use(morgan("dev"));
 // routes
 app.use("/api/v1/auth", AuthRoute);
 app.use("/api/v1/books", BookRoute);
+app.use("/api/v1/wishlist", WishlistRoute);
+app.use("/api/v1/reading-list", ReadingListRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
