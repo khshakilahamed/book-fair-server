@@ -58,8 +58,56 @@ const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const addBookReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id: bookId } = req.params;
+
+    // review & user --> user means userId
+    const { ...reviewData } = req.body;
+
+    const review = {
+      bookId,
+      ...reviewData,
+    };
+
+    const result = await BookService.addBookReview(review);
+
+    sendResponse<IBook>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successfully posted review",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getReviews = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: bookId } = req.params;
+
+    const result = await BookService.getReviews(bookId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successfully retrieved review",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const BookController = {
   createBook,
   getSingleBook,
   getAllBooks,
+  addBookReview,
+  getReviews,
 };

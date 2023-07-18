@@ -27,6 +27,8 @@
 ```
 
 - `POST /auth/refresh-token` (get refresh token from cookie & return new access token)
+- `POST /auth/current-user` (verify auth- access token)
+- `POST /auth/logout`
 
 ---
 
@@ -37,7 +39,6 @@
 `Sample Data`
 
 ```js
-// create user as Donar
 {
     "title": "The Inner Face: A Guide to the Emotions We Hide",
     "genre": "Biography, Lifestyle",
@@ -52,3 +53,13 @@
 
 - `Get /books/64b3ec0e75b9157d8b1e1c83`
 - `Get /books`
+- `POST /books/review/64b4cf1d6197365d498e6362` (also need accessToken to post review)
+
+```js
+// sample data for book review
+{
+    "review": "Good Book 2"
+}
+```
+
+- `GET /books/reviews/64b4cf1d6197365d498e6362`

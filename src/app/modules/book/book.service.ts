@@ -1,7 +1,10 @@
+import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { bookSearchableFields } from "./book.constant";
-import { IBook, IBookFilters } from "./book.interface";
+import { IBook, IBookFilters, IBookReview } from "./book.interface";
 import { Book } from "./book.model";
+import mongoose, { ObjectId, Types } from "mongoose";
+import { IUser } from "../user/user.interface";
 
 const createBook = async (payload: IBook): Promise<IBook> => {
   const newBook = await Book.create(payload);
@@ -64,4 +67,43 @@ const getAllBooks = async (filters: IBookFilters): Promise<IBook[]> => {
   return books;
 };
 
-export const BookService = { createBook, getSingleBook, getAllBooks };
+const addBookReview = async (payload: IBookReview) => {
+  const { bookId, user, review } = payload;
+
+  const isBookExist = await Book.findById(bookId);
+
+  if (!isBookExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Book not found");
+  }
+
+  const bookReview = {
+    user: new mongoose.Types.ObjectId(user),
+    review,
+  };
+
+  isBookExist.reviews?.push(bookReview);
+
+  const result = await isBookExist.save();
+
+  return result;
+};
+
+const getReviews = async (bookId: string) => {
+  const book = await Book.findById(bookId).populate("reviews.user");
+
+  if (!book) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Book does not found");
+  }
+
+  const { reviews } = book;
+
+  return reviews;
+};
+
+export const BookService = {
+  createBook,
+  getSingleBook,
+  getAllBooks,
+  addBookReview,
+  getReviews,
+};

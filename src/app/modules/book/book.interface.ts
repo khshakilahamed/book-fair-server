@@ -1,8 +1,8 @@
-import { Model, Types } from "mongoose";
+import { Model, ObjectId, Types } from "mongoose";
 import { IUser } from "../user/user.interface";
 
 export type IBook = {
-  //   _id?: ObjectId;
+  _id?: ObjectId;
   title: string;
   genre: string;
   publicationDate: string;
@@ -25,3 +25,9 @@ export type IBookFilters = {
   minPrice?: string;
   maxPrice?: string;
 };
+
+export interface IBookReview {
+  bookId: string;
+  user: string;
+  review: string;
+}

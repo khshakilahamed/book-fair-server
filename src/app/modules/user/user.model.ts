@@ -17,6 +17,7 @@ const userSchema = new Schema<IUser, UserModel>(
     password: {
       type: String,
       required: true,
+      select: 0,
     },
   },
   {
@@ -27,7 +28,7 @@ const userSchema = new Schema<IUser, UserModel>(
 userSchema.statics.isUserExist = async function (
   email: string
 ): Promise<IUser | null> {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select("+password");
 
   return user;
 };
