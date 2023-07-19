@@ -67,6 +67,14 @@
 - `DELETE /books/64b3ec0e75b9157d8b1e1c83` (auth check - access token)
 
 - `GET /books/my-books` (auth check - access token)
+- `PATCH /books/64b4cf1d6197365d498e6362` (auth check - access token)
+
+```js
+{
+    "title": "The Inner Face: A Guide to the Emotions We Hide",
+    "author": "Ellie Thomson"
+}
+```
 
 ---
 
