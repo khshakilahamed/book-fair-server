@@ -101,9 +101,35 @@ const getReviews = async (bookId: string) => {
 };
 
 const myBooks = async (payload: string) => {
-  console.log(payload);
-
   const result = await Book.find({ user: payload }).sort({ createdAt: "desc" });
+
+  return result;
+};
+
+interface IBookUpdate {
+  bookId: string;
+  payload: Partial<IBook>;
+  user: string;
+}
+
+const updateBook = async ({ bookId, payload, user }: IBookUpdate) => {
+  const isExistBook = await Book.findById(bookId);
+
+  if (!isExistBook) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Book does not found");
+  }
+
+  const isThisUserCreated = await Book.findOne({ user: user, _id: bookId });
+
+  if (!isThisUserCreated) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "You can not update this book");
+  }
+
+  const result = await Book.findOneAndUpdate(
+    { user: user, _id: bookId },
+    payload,
+    { new: true }
+  );
 
   return result;
 };
@@ -111,7 +137,7 @@ const myBooks = async (payload: string) => {
 const deleteBook = async (payload: { bookId: string; user: string }) => {
   const { bookId, user } = payload;
 
-  const book = await Book.findById(bookId);
+  const book = await Book.findOne({ user: user, _id: bookId });
 
   if (!book) {
     throw new ApiError(httpStatus.NOT_FOUND, "Book does not found");
@@ -134,4 +160,5 @@ export const BookService = {
   getReviews,
   deleteBook,
   myBooks,
+  updateBook,
 };

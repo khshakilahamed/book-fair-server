@@ -108,14 +108,34 @@ const getMyBooks = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req?.body.user;
 
-    console.log(user);
-
     const result = await BookService.myBooks(user);
 
     sendResponse<IBook[]>(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Successfully retrieved the books",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateBook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: bookId } = req.params;
+    const { user, ...payload } = req?.body;
+
+    const result = await BookService.updateBook({
+      bookId,
+      payload,
+      user,
+    });
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successfully updated the book",
       data: result,
     });
   } catch (error) {
@@ -149,4 +169,5 @@ export const BookController = {
   getReviews,
   getMyBooks,
   deleteBook,
+  updateBook,
 };
