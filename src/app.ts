@@ -10,7 +10,14 @@ import { BookRoute } from "./app/modules/book/book.route";
 import { WishlistRoute } from "./app/modules/wishlist/wishlist.route";
 import { ReadingListRoute } from "./app/modules/readingList/readingList.route";
 
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "https://book-fair-read-book.netlify.app/",
+    "http://localhost:5173/",
+  ],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // parser
